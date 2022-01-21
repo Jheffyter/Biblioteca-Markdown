@@ -17,7 +17,6 @@ function trataErro (erro) {
 }
 
 //tratando de forma assincrona promises com async e await
-
 async function pegaArquivo (caminhoDoArquivo) {
   const encoding = "UTF-8";
   try {
@@ -26,8 +25,7 @@ async function pegaArquivo (caminhoDoArquivo) {
     return extraiLinks (texto);
   } catch (erro) {
     trataErro (erro);
-  }
-  
+  }  
 }
 
 //tratando de forma assincrona promises com .then e .catch

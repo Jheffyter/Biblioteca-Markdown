@@ -1,14 +1,22 @@
 const fetch = (...args) => import ("node-fetch")
   .then (({default: fetch}) => fetch (...args));
 
+function manejaErro (erro) {
+  throw new Error (erro.message);
+}
+
 async function checaStatus (arrayURLs) {
-  const arrayStatus = await Promise
+  try {
+    const arrayStatus = await Promise
     .all (arrayURLs
       .map (async url => {
         const res = await fetch (url);
-        return res.status;
+        return `${res.status} - ${res.statusText}`;
       }));
       return arrayStatus;
+  } catch (erro) {
+    manejaErro (erro);
+  }  
 }
 
 function geraArrayDeURLs (arrayLinks) {
@@ -20,7 +28,12 @@ function geraArrayDeURLs (arrayLinks) {
 async function validaURLs (arrayLinks) {
   const links = geraArrayDeURLs (arrayLinks);
   const statusLinks = await checaStatus (links);
-  return statusLinks;
+  const resultados = arrayLinks
+    .map ((objeto, indice) => ({
+      ...objeto,
+      status: statusLinks [indice]
+    }));
+    return resultados;
 }
 
 module.exports = validaURLs;
